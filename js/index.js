@@ -1,5 +1,6 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
+
 canvas.width = innerWidth
 canvas.height = innerHeight
 
@@ -18,6 +19,22 @@ draw() {
 }
 }
 
+class player {
+    constructor({position, velocity}) {
+        this.position = position
+        this.position = velocity
+        this.radius = 10
+    }
+}
+
+draw (){
+    c.beginPath()
+    c.arc (this.position.x, this.position.y, this.radius, 0, Math.PI*2)
+    c.fillStyle = 'yellow'
+    c.fill()
+    c.closePath()
+}
+
 const map = [
     ['-', '-','-','-','-','-' ],
     ['-', ' ',' ',' ',' ','-' ],
@@ -27,6 +44,16 @@ const map = [
 ]
 
 const boundaries = [];
+const player = new player ({
+    position: {
+        x:40,
+        y:40
+    },
+    velocity: {
+        x:0
+        y:0
+    }
+})
 
  map.forEach((row, i) => {
     row.forEach((symbol,i) => {
@@ -47,3 +74,4 @@ const boundaries = [];
  boundaries.forEach((boundary) => {
     boundary.draw();
  })
+ player.draw()
