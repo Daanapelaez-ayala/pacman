@@ -23,8 +23,7 @@ class player {
     constructor({position, velocity}) {
         this.position = position
         this.position = velocity
-        this.radius = 10
-    }
+        this.radius = 15
 }
 
 draw (){
@@ -35,6 +34,40 @@ draw (){
     c.closePath()
 }
 
+update() {
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+}
+}
+
+const boundaries = [];
+const player = new player ({
+    position: {
+        x:Boundary.width + Boundary.width /2,
+        y:Boundary.height + Boundary.height /2
+    },
+    velocity: {
+        x:0,
+        y:0
+    }
+})
+const key = {
+    w: {
+        pressed: false
+    },
+    a: {
+        pressed: false
+    },
+    s: {
+        pressed: false
+    },
+    d: {
+        pressed: false
+    },
+    
+}
+let lastkey = ''
 const map = [
     ['-', '-','-','-','-','-' ],
     ['-', ' ',' ',' ',' ','-' ],
@@ -42,19 +75,6 @@ const map = [
     ['-', ' ',' ',' ',' ','-' ],
     ['-', '-','-','-','-','-' ]
 ]
-
-const boundaries = [];
-const player = new player ({
-    position: {
-        x:40,
-        y:40
-    },
-    velocity: {
-        x:0
-        y:0
-    }
-})
-
  map.forEach((row, i) => {
     row.forEach((symbol,i) => {
         switch(symbol){
@@ -65,13 +85,77 @@ const player = new player ({
                             x: Boundary.width * j,
                             y: Boundary.height * i
                         }
-                    }))
+                    })
+                )
                     break;
                 }
     })
  })
+function animate() {
+    requestAnimationFrame(animate)
+    c.clearRect(0, 0, canvas.width, canvas.height)
+    boundaries.forEach((boundary) => {
+        boundary.draw()
 
- boundaries.forEach((boundary) => {
-    boundary.draw();
+        if (player.position.x - player.radius <= boundary.position.y )
+     })
+    
+     player.update() 
+     player.velocity.x = 0
+     player.velocity.y = 0
+
+     if(keys.w.pressed && lastkey === 'w'){
+        player.velocity.y =-5
+     } else if (keys.a.pressed && lastkey === 'a') {
+        player.velocity.y =-5
+     }
+     else if (keys.s.pressed && lastkey === 's') {
+        player.velocity.y =-5
+     }
+     else if (keys.d.pressed && lastkey === 'd') {
+        player.velocity.y =-5
+     }
+}
+
+animate()
+
+addEventListener('keydown',({key})=>{
+switch(key) {
+case 'w':
+keys.w.pressed = true 
+lastkey = 'w'
+break
+case 'a':
+    keys.a.pressed = true 
+    lastkey = 'a'
+break
+case 's':
+    keys.s.pressed = true 
+    lastkey = 's'
+break
+case 'd':
+    keys.d.pressed = true 
+    lastkey = 'd'
+break
+}
+
  })
- player.draw()
+
+ addEventListener('keyup',({key})=>{
+    switch(key) {
+    case 'w':
+        keys.w.pressed = false
+    break
+    case 'a':
+        keys.a.pressed = false
+    break
+    case 's':
+        keys.s.pressed = false
+    break
+    case 'd':
+        keys.d.pressed = false
+    break
+    }
+    
+
+     })
