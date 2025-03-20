@@ -69,11 +69,11 @@ const key = {
 }
 let lastkey = ''
 const map = [
-    ['-', '-','-','-','-','-' ],
-    ['-', ' ',' ',' ',' ','-' ],
-    ['-', ' ','-','-',' ',' ' ],
-    ['-', ' ',' ',' ',' ','-' ],
-    ['-', '-','-','-','-','-' ]
+    ['-', '-','-','-','-','-','-' ],
+    ['-', ' ',' ',' ',' ',' ','-' ],
+    ['-', ' ','-',' ','-',' ','-' ],
+    ['-', ' ',' ',' ',' ',' ','-' ],
+    ['-', '-','-','-','-','-','-' ]
 ]
  map.forEach((row, i) => {
     row.forEach((symbol,i) => {
@@ -91,30 +91,68 @@ const map = [
                 }
     })
  })
+ function circleCollidesWithRectangle({
+    circle,
+    rectangle
+ }) {
+    return (player.position.y - player.radius + player.velocity.y <= boundary.position.y + boundary.height
+        && player.position.x + player.radius + player.velocity.x>= boundary.position.x 
+        && player.position.y + player.raduis + player.velocity.y >= boundary.position.y 
+        && player. position.x- player.x - player.radius + player.velocity.x <= boundary.position.x + boundary.width)
+ }
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
-    boundaries.forEach((boundary) => {
-        boundary.draw()
-
-        if (player.position.x - player.radius <= boundary.position.y )
-     })
-    
-     player.update() 
-     player.velocity.x = 0
-     player.velocity.y = 0
-
-     if(keys.w.pressed && lastkey === 'w'){
-        player.velocity.y =-5
+        if (keys.a.pressed && lastkey === 'w') {
+            for (let i=0; i<boundaries.length; i++) {
+                const boundary = boundaries[i]
+            
+            if( circleCollidesWithRectangle({
+                circle:{
+                    ...player,
+                    velocity: {
+x:0,
+y:5
+                }
+            },
+                rectangle:boundary
+             })
+            ) {
+                    player.velocity.y =0
+                    break;
+                } else {
+                    player.velocity.y =-5
+                }
+            
      } else if (keys.a.pressed && lastkey === 'a') {
         player.velocity.y =-5
      }
      else if (keys.s.pressed && lastkey === 's') {
-        player.velocity.y =-5
+        player.velocity.y =5
      }
      else if (keys.d.pressed && lastkey === 'd') {
-        player.velocity.y =-5
+
+        player.velocity.y =5
      }
+    boundaries.forEach((boundary) => {
+        boundary.draw()
+
+        if (circleCollidesWithRectangle({
+            circle:player,
+            rectangle: boundary
+        })
+    ) {
+
+    }
+        player.velocity.x = 0
+        player.velocity.y = 0
+     })
+    
+     player.update() 
+    //  player.velocity.x = 0
+    //  player.velocity.y = 0
+
+
 }
 
 animate()
